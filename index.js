@@ -8,6 +8,12 @@ const typeDefs = `
 
 type Query {
  welcome: String!
+ links: [Link!]!
+}
+type Link {
+ id: ID!
+ description: String!
+ url:String!
 }
 `
 
@@ -25,4 +31,4 @@ const server = new GraphQLServer({
     typeDefs,
     resolvers,
 })
-server.start(() => console.log(`Server is running on http://localhost:400`))
+server.start(() => console.log(`Server is running on http://localhost:4000`))
