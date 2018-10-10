@@ -4,17 +4,22 @@
 
 const { GraphQLServer } = require('graphql-yoga')
 
+// The Exclamation Mark after the data type means you have to provide that data and it has to be that same data type specified.
 const typeDefs = `
+  type Query {
+   welcome: String!
+   links: [Link!]!
+  }
 
-type Query {
- welcome: String!
- links: [Link!]!
-}
-type Link {
- id: ID!
- description: String!
- url:String!
-}
+  type Mutation {
+    addLink(url: String!, description: String!): Link!
+  }
+
+  type Link {
+   id: ID!
+   description: String!
+   url:String!
+  }
 `
 
 // This is dummy text, in a rel app we would use real data;
@@ -41,6 +46,19 @@ const resolvers = {
     welcome: () => `Hacker News clone begins.`,
     links:   () => articleLinks,
    },
+   Mutation: {
+    // root is for context, args is for params coming from 
+       addLink: (root, args) => {
+           const link = {
+                id: `link-${++idCount}`,
+                description: args.description,
+                url: args.url,
+           }
+           articleLinks.push(link)
+           return link
+           // like res.send
+       }
+   }
 }
 
 // our server is looking for our typeDefs and our Resolvers
